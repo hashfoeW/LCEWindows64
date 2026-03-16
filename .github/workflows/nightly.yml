@@ -1,0 +1,45 @@
+name: Nightly Releases
+
+on:
+  workflow_dispatch: 
+  push:
+    branches:
+    - 'main'
+    paths-ignore:
+      - '.gitignore'
+      - '*.md'
+      - '.github/*.md'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Windows64
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+
+    - name: Setup msbuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Build
+      run: MSBuild.exe MinecraftConsoles.sln /p:Configuration=Release /p:Platform="Windows64"
+
+    - name: Zip Build
+      run: 7z a -r LCEWindows64.7z ./x64/Release/* -mx=5
+
+    - name: Update Client release
+      uses: andelf/nightly-release@main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: nightly
+        name: Nightly Client Release
+        body: |
+          Requires at least Windows 7 and DirectX 11 compatible GPU to run. Compiled with MSVC v14.44.35207 in Release mode with Whole Program Optimization, as well as `/O2 /Ot /Oi /Ob3 /GF /fp:precise`.
+        files: |
+            LCEWindows64.7z
+            ./x64/Release/Minecraft.Client.exe

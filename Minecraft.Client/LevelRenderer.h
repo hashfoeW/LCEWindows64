@@ -53,7 +53,7 @@ public:
 #endif
 	static const int CHUNK_Y_COUNT = Level::maxBuildHeight / CHUNK_SIZE;
 #if defined _WINDOWS64
-	static const int MAX_COMMANDBUFFER_ALLOCATIONS = 2047 * 1024 * 1024;	// Changed to 2047. 4J had set to 512.
+	static const int MAX_COMMANDBUFFER_ALLOCATIONS = 55 * 1024 * 1024;	// Changed to 2047. 4J had set to 512.
 #elif defined _XBOX_ONE
 	static const int MAX_COMMANDBUFFER_ALLOCATIONS = 512 * 1024 * 1024;		// 4J - added
 #elif defined __ORBIS__
@@ -272,10 +272,10 @@ public:
 
 	bool				dirtyChunkPresent;
 	int64_t				lastDirtyChunkFound;
-	static const int	FORCE_DIRTY_CHUNK_CHECK_PERIOD_MS = 125; // decreased from 250 to 125 - updated by detectiveren
+	static const int	FORCE_DIRTY_CHUNK_CHECK_PERIOD_MS = 250; // decreased from 250 to 125 - updated by detectiveren
 
 #ifdef _LARGE_WORLDS
-	static const int MAX_CONCURRENT_CHUNK_REBUILDS = 8; // increased from 4 to 8 - updated by detectiveren
+	static const int MAX_CONCURRENT_CHUNK_REBUILDS = 4; // increased from 4 to 8 - updated by detectiveren
 	static const int MAX_CHUNK_REBUILD_THREADS = MAX_CONCURRENT_CHUNK_REBUILDS - 1;
 	static Chunk permaChunk[MAX_CONCURRENT_CHUNK_REBUILDS];
 	static C4JThread *rebuildThreads[MAX_CHUNK_REBUILD_THREADS];
